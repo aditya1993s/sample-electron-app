@@ -1,4 +1,12 @@
 {
     "name":"myVM",
-    "ip": "11.11.11.11"
+    "ip": "11.11.11.11",
+    "commands": [
+        {
+          "name": "Command001",
+          "button": true,
+          "color": "#00b8e6",
+          "command": ""
+        }
+      ]
 }

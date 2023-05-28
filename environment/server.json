@@ -1,4 +1,18 @@
 {
-    "name":"Bira",
-    "ip":"10.10.10.10"
+  "name": "Bira",
+  "ip": "10.10.10.10",
+  "commands": [
+    {
+      "name": "Command001",
+      "button": true,
+      "color": "#404040",
+      "command": ""
+    },
+    {
+      "name": "Command001",
+      "button": true,
+      "color": "#ffb3b3",
+      "command": ""
+    }
+  ]
 }

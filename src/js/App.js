@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 export default function App() {
   const [listOfFiles, setListOfFiles] = useState([]);
@@ -55,6 +55,21 @@ export default function App() {
       <div>
         <p>Name:{fileContent?.name}</p>
         <p>IP:{fileContent?.ip}</p>
+      </div>
+      <div>
+        <Container>
+          <Row>
+            {fileContent?.commands?.map((item, index) => {
+              return (
+                <Col key={index}>
+                  <Button style={{ background: item.color }}>
+                    {item.name}
+                  </Button>
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
       </div>
     </>
   );

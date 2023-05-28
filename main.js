@@ -1,4 +1,10 @@
-const { BrowserWindow, app, ipcMain, Notification } = require("electron");
+const {
+  BrowserWindow,
+  app,
+  ipcMain,
+  Notification,
+  dialog,
+} = require("electron");
 const path = require("path");
 const fs = require("fs");
 
@@ -58,36 +64,46 @@ ipcMain.on("getFileContent", (event, arg) => {
   event.reply("file-content", JSON.parse(rawdata));
 });
 
-// const run_script = (command, args, callback) => {
-//   var child = child_process.spawn(command, args, {
-//     encoding: "utf8",
-//     shell: true,
-//   });
-//   // You can also use a variable to save the output for when the script closes later
-//   child.on("error", (error) => {
-//     con.log(`error: ${error.message}`);
-//   });
+function run_script(command, args, callback) {
+  var child = child_process.spawn(command, args, {
+    encoding: "utf8",
+    shell: true,
+  });
+  // You can also use a variable to save the output for when the script closes later
+  child.on("error", (error) => {
+    dialog.showMessageBox({
+      title: "Title",
+      type: "warning",
+      message: "Error occured.\r\n" + error,
+    });
+  });
 
-//   child.stdout.setEncoding("utf8");
-//   child.stdout.on("data", (data) => {
-//     //Here is the output
-//     data = data.toString();
-//     con.log(data);
-//   });
+  child.stdout.setEncoding("utf8");
+  child.stdout.on("data", (data) => {
+    //Here is the output
+    data = data.toString();
+    console.log(data);
+  });
 
-//   child.stderr.setEncoding("utf8");
-//   child.stderr.on("data", (data) => {
-//     con.log(data);
-//   });
+  child.stderr.setEncoding("utf8");
+  child.stderr.on("data", (data) => {
+    // Return some data to the renderer process with the mainprocess-response ID
+    win.webContents.send("mainprocess-response", data);
+    //Here is the output from the command
+    console.log(data);
+  });
 
-//   child.on("close", (code) => {
-//     //Here you can get the exit code of the script
-//     switch (code) {
-//       case 0:
-//         con.log(`child process exited with code ${code}`);
-//         break;
-//     }
-//     con.log(`child process exited with code ${code}`);
-//   });
-//   if (typeof callback === "function") callback();
-// };
+  child.on("close", (code) => {
+    //Here you can get the exit code of the script
+    switch (code) {
+      case 0:
+        dialog.showMessageBox({
+          title: "Title",
+          type: "info",
+          message: "End process.\r\n",
+        });
+        break;
+    }
+  });
+  if (typeof callback === "function") callback();
+}
