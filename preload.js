@@ -19,9 +19,9 @@ const { ipcRenderer, contextBridge } = require("electron");
 // });
 
 contextBridge.exposeInMainWorld("electronAPI", {
-  requestData: () => {
+  requestAllFiles: (path) => {
     return new Promise((resolve, reject) => {
-      ipcRenderer.send("listFiles");
+      ipcRenderer.send("listFiles", path);
       ipcRenderer.once("data-reply", (event, data) => {
         resolve(data);
       });
@@ -34,6 +34,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.once("file-content", (event, data) => {
         resolve(data);
       });
+    });
+  },
+
+  executeCommand: (cmdWithArgs) => {
+    return new Promise((resolve, reject) => {
+      ipcRenderer.send("runCommand", cmdWithArgs);
+      // ipcRenderer.once("file-content", (event, data) => {
+      //   resolve(data);
+      // });
     });
   },
 });

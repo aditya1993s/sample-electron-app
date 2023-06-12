@@ -6,13 +6,13 @@
       "name": "Command001",
       "button": true,
       "color": "#404040",
-      "command": ""
+      "command": "google-chrome www.google.com"
     },
     {
       "name": "Command001",
       "button": true,
       "color": "#ffb3b3",
-      "command": ""
+      "command": "google-chrome www.youtube.com"
     }
   ]
 }

@@ -6,7 +6,7 @@
           "name": "Command001",
           "button": true,
           "color": "#00b8e6",
-          "command": ""
+          "command": "gnome-terminal -- ssh username@10.10.10.10"
         }
       ]
 }

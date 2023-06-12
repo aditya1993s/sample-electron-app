@@ -6,10 +6,10 @@ export default function App() {
   const [fileContent, setFileContent] = useState({});
   const getData = () => {
     electronAPI
-      .requestData()
+      .requestAllFiles("/home/user/Videos/environment")
       .then((data) => {
         electronAPI
-          .requestFileContent(data[0])
+          .requestFileContent("/home/user/Videos/environment/" + data[0])
           .then((data) => {
             setFileContent(data);
           })
@@ -25,7 +25,17 @@ export default function App() {
   };
   const onChange = (event) => {
     electronAPI
-      .requestFileContent(event.target.value)
+      .requestFileContent("/home/user/Videos/environment/" + event.target.value)
+      .then((data) => {
+        setFileContent(data);
+      })
+      .catch((error) => {
+        console.error("Error retrieving data:", error);
+      });
+  };
+  const onClickBtn = (cmdWithArgs) => {
+    electronAPI
+      .executeCommand(cmdWithArgs)
       .then((data) => {
         setFileContent(data);
       })
@@ -38,39 +48,49 @@ export default function App() {
   }, []);
   return (
     <>
-      <h1>I am App</h1>
-      <button onClick={getData}>Notify</button>
-      <Form.Select
-        aria-label="Default select example"
-        onChange={(event) => onChange(event)}
-      >
-        {listOfFiles.map((item, id) => {
-          return (
-            <option value={item} key={id}>
-              {item}
-            </option>
-          );
-        })}
-      </Form.Select>
-      <div>
-        <p>Name:{fileContent?.name}</p>
-        <p>IP:{fileContent?.ip}</p>
-      </div>
-      <div>
+      <Container>
+        <h1>From App.js</h1>
         <Container>
-          <Row>
-            {fileContent?.commands?.map((item, index) => {
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label>Location of Machines dump</Form.Label>
+            <Form.Control type="text" placeholder="" />
+          </Form.Group>
+          <Form.Select
+            aria-label="Default select example"
+            onChange={(event) => onChange(event)}
+          >
+            {listOfFiles.map((item, id) => {
               return (
-                <Col key={index}>
-                  <Button style={{ background: item.color }}>
-                    {item.name}
-                  </Button>
-                </Col>
+                <option value={item} key={id}>
+                  {item}
+                </option>
               );
             })}
-          </Row>
+          </Form.Select>
         </Container>
-      </div>
+        {/* <div>
+          <p>Name:{fileContent?.name}</p>
+          <p>IP:{fileContent?.ip}</p>
+        </div> */}
+        <div>
+          <Container style={{ marginTop: "10px" }}>
+            <Row>
+              {fileContent?.commands?.map((item, index) => {
+                return (
+                  <Col key={index}>
+                    <Button
+                      style={{ background: item.color }}
+                      onClick={() => onClickBtn(item.command)}
+                    >
+                      {item.name}
+                    </Button>
+                  </Col>
+                );
+              })}
+            </Row>
+          </Container>
+        </div>
+      </Container>
     </>
   );
 }
