@@ -4,12 +4,17 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 export default function App() {
   const [listOfFiles, setListOfFiles] = useState([]);
   const [fileContent, setFileContent] = useState({});
+  const [propertiesPath, setPropertiesPath] = useState("");
+  const [folderLocation, setFolderLocation] = useState("");
+  const loadFilesOnLocation = () => {
+    setFolderLocation(propertiesPath);
+  };
   const getData = () => {
     electronAPI
-      .requestAllFiles("/home/user/Videos/environment")
+      .requestAllFiles(folderLocation)
       .then((data) => {
         electronAPI
-          .requestFileContent("/home/user/Videos/environment/" + data[0])
+          .requestFileContent(folderLocation + data[0])
           .then((data) => {
             setFileContent(data);
           })
@@ -25,7 +30,7 @@ export default function App() {
   };
   const onChange = (event) => {
     electronAPI
-      .requestFileContent("/home/user/Videos/environment/" + event.target.value)
+      .requestFileContent(folderLocation + event.target.value)
       .then((data) => {
         setFileContent(data);
       })
@@ -45,17 +50,39 @@ export default function App() {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [folderLocation]);
   return (
     <>
       <Container>
         <h1>From App.js</h1>
         <Container>
+          {/* <input
+            directory=""
+            webkitdirectory="true"
+            type="file"
+            onChange={(event) => {
+              console.log(event.target.value.split("\\").pop());
+            }}
+          /> */}
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Location of Machines dump</Form.Label>
-            <Form.Control type="text" placeholder="" />
+            <Form.Control
+              value={propertiesPath}
+              type="text"
+              placeholder=""
+              onChange={(e) => setPropertiesPath(e.target.value)}
+            />
           </Form.Group>
+          <Button
+            variant="primary"
+            onClick={() => {
+              loadFilesOnLocation();
+            }}
+          >
+            Load
+          </Button>
           <Form.Select
+            style={{ marginTop: "10px" }}
             aria-label="Default select example"
             onChange={(event) => onChange(event)}
           >
