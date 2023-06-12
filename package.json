@@ -5,15 +5,17 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --config webpack.common.js --watch",
-    "start": "electron ."
+    "watch": "export SET NODE_OPTIONS=--openssl-legacy-provider && webpack --config webpack.common.js --watch",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.2.3",
-    "electron": "^24.4.0",
+    "electron-squirrel-startup": "^1.0.0",
     "react": "^16.13.1",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^16.13.1"
@@ -22,8 +24,14 @@
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
+    "@electron-forge/cli": "^6.1.1",
+    "@electron-forge/maker-deb": "^6.1.1",
+    "@electron-forge/maker-rpm": "^6.1.1",
+    "@electron-forge/maker-squirrel": "^6.1.1",
+    "@electron-forge/maker-zip": "^6.1.1",
     "babel-loader": "^8.1.0",
     "css-loader": "^4.3.0",
+    "electron": "^24.4.0",
     "electron-reload": "^1.5.0",
     "sass": "^1.26.11",
     "sass-loader": "^10.0.2",
